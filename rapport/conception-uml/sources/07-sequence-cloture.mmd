@@ -1,0 +1,30 @@
+sequenceDiagram
+  autonumber
+  actor P as Pompiste
+  participant F as Frontend Angular
+  participant GW as gateway-service
+  participant V as vente-service
+  participant S as stock-service
+  P->>F: Saisit les index de fin et l'argent compté
+  F->>GW: POST /api/postes/{id}/cloturer (JWT)
+  GW->>GW: Vérifie le JWT et le rôle
+  GW->>V: Transmet la requête (X-User, X-Role)
+  V->>V: Charge les relevés d'index et le paramétrage
+  loop Pour chaque pistolet
+    V->>S: GET /api/cuves/{id} (prix de vente)
+    S-->>V: CuveDTO
+    V->>V: volume = index fin - index début
+    alt Volume non saisi > 0
+      V->>S: POST /api/cuves/{id}/sortie
+      S-->>V: Stock diminué
+      V->>V: Enregistre la vente en espèces
+    end
+  end
+  V->>V: Espèces attendues = compteurs - carte - chèque - crédit
+  V->>V: Écart = argent compté - (fond + espèces attendues)
+  alt |écart| > écart toléré
+    V->>V: ecartHorsTolerance = true (alerte)
+  end
+  V-->>GW: ClotureDTO
+  GW-->>F: 200 OK
+  F-->>P: Affiche le résultat et l'écart

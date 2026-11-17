@@ -1,0 +1,22 @@
+sequenceDiagram
+  autonumber
+  actor G as Gérant
+  participant GW as gateway-service
+  participant S as stock-service
+  participant ST as statistiques-service
+  participant V as vente-service
+  participant A as achat-service
+  G->>GW: POST /api/jaugeages (cuve, volume mesuré)
+  GW->>S: Requête autorisée
+  S->>S: écart = mesuré - théorique
+  S->>S: anomalie si écart % > tolérance du carburant
+  S-->>G: JaugeageDTO (anomalie)
+  G->>GW: GET /api/statistiques/pertes
+  GW->>ST: Requête autorisée
+  par Collecte des données
+    ST->>S: GET /api/jaugeages/periode
+    ST->>V: GET /api/clotures
+    ST->>A: GET /api/livraisons/prix-achat-moyen
+  end
+  ST->>ST: Pertes carburant (L et DH) + manquants de caisse
+  ST-->>G: RapportPertesDTO

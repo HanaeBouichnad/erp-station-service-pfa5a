@@ -1,0 +1,7 @@
+stateDiagram-v2
+  [*] --> EMISE : générer la facture
+  EMISE --> PARTIELLEMENT_PAYEE : règlement < reste à payer
+  EMISE --> PAYEE : règlement = reste à payer
+  PARTIELLEMENT_PAYEE --> PARTIELLEMENT_PAYEE : nouveau règlement partiel
+  PARTIELLEMENT_PAYEE --> PAYEE : règlement du solde
+  PAYEE --> [*]

@@ -1,0 +1,19 @@
+flowchart LR
+  classDef node fill:#f3f5f8,stroke:#6b7785,color:#1d2733
+  classDef ct fill:#eef4fb,stroke:#1f5a96,color:#1d2733
+  classDef db fill:#fff4e0,stroke:#c77700,color:#1d2733
+  subgraph POSTE["Poste client (navigateur)"]
+    NAV["Application Angular"]:::ct
+  end
+  subgraph SRV["Serveur (Docker Engine + Docker Compose)"]
+    direction TB
+    C1["conteneur discovery-service"]:::ct
+    C2["conteneur gateway-service<br/>port publié 8888"]:::ct
+    C3["conteneurs des 6 microservices"]:::ct
+    C4[("conteneur PostgreSQL 16<br/>5 bases")]:::db
+    C2 --> C3
+    C3 --> C4
+    C3 -.-> C1
+    C2 -.-> C1
+  end
+  NAV -->|HTTPS / JSON| C2

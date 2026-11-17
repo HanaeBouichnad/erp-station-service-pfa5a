@@ -1,0 +1,19 @@
+classDiagram
+  direction LR
+  class Utilisateur {
+    Long id
+    String username
+    String motDePasse
+    String nomComplet
+    Role role
+    boolean actif
+  }
+  class Role {
+    <<enumeration>>
+    ADMIN
+    GERANT
+    POMPISTE
+    COMPTABLE
+  }
+  Utilisateur ..> Role
+  note for Utilisateur "motDePasse haché avec BCrypt"

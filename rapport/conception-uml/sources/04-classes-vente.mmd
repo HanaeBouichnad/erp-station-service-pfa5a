@@ -1,0 +1,81 @@
+classDiagram
+  direction LR
+  class Pompe {
+    Long id
+    Integer numero
+    boolean active
+  }
+  class Pistolet {
+    Long id
+    Integer numero
+    Long cuveId
+    Double dernierIndex
+    boolean active
+  }
+  class PosteTravail {
+    Long id
+    String pompiste
+    LocalDateTime dateOuverture
+    LocalDateTime dateCloture
+    BigDecimal fondCaisse
+    StatutPoste statut
+  }
+  class ReleveIndex {
+    Long id
+    Double dernierIndexConnu
+    Double indexDebut
+    Double indexFin
+    Double volumeCompteur
+    BigDecimal prixUnitaire
+    BigDecimal montantCompteur
+    boolean indexDiscontinu
+  }
+  class Vente {
+    Long id
+    LocalDateTime dateVente
+    Double volume
+    BigDecimal prixUnitaire
+    BigDecimal montantTotal
+    ModePaiement modePaiement
+    Long cuveId
+    Long carburantId
+    Long clientId
+    boolean calculeeParIndex
+  }
+  class ClotureCaisse {
+    Long id
+    LocalDateTime dateCloture
+    Double volumeCompteurs
+    BigDecimal montantCompteurs
+    BigDecimal especesAttendues
+    BigDecimal totalTheorique
+    BigDecimal totalPhysique
+    BigDecimal ecart
+    boolean ecartHorsTolerance
+    int nbIndexDiscontinus
+  }
+  class ParametreControle {
+    Long id
+    BigDecimal seuilEcartCaisse
+    boolean controleContinuiteIndex
+  }
+  class ModePaiement {
+    <<enumeration>>
+    ESPECES
+    CARTE
+    CHEQUE
+    CREDIT
+  }
+  class StatutPoste {
+    <<enumeration>>
+    OUVERT
+    CLOTURE
+  }
+  Pompe "1" *-- "*" Pistolet : possède
+  ReleveIndex "*" --> "1" PosteTravail
+  ReleveIndex "*" --> "1" Pistolet
+  Vente "*" --> "1" PosteTravail
+  Vente "*" --> "1" Pistolet
+  ClotureCaisse "0..1" --> "1" PosteTravail
+  Vente ..> ModePaiement
+  PosteTravail ..> StatutPoste

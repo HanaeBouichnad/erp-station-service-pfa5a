@@ -1,0 +1,23 @@
+sequenceDiagram
+  autonumber
+  actor P as Pompiste
+  participant GW as gateway-service
+  participant V as vente-service
+  participant S as stock-service
+  participant C as client-service
+  P->>GW: POST /api/ventes (CREDIT, clientId)
+  GW->>V: Requête autorisée
+  V->>S: GET /api/cuves/{id}
+  S-->>V: Prix de vente
+  V->>C: GET /api/clients/{id}/autorisation?montant=
+  C-->>V: autorise / motif
+  alt Plafond dépassé
+    V-->>P: 422 Crédit refusé
+  else Crédit autorisé
+    V->>S: POST /api/cuves/{id}/sortie
+    S-->>V: Stock diminué
+    V->>V: Enregistre la vente
+    V->>C: POST /api/clients/{id}/consommations
+    C-->>V: Encours du client augmenté
+    V-->>P: 201 Vente enregistrée
+  end

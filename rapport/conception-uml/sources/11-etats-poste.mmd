@@ -1,0 +1,14 @@
+stateDiagram-v2
+  [*] --> Ouvert : ouvrir(fondCaisse)
+  Ouvert --> IndexSaisis : saisir les index de début
+  IndexSaisis --> IndexSaisis : vente carte, chèque ou crédit
+  IndexSaisis --> Cloture : clôturer(index de fin, argent compté)
+  Ouvert --> Cloture : clôturer sans index (mode simple)
+  state Cloture {
+    [*] --> CalculEcart
+    CalculEcart --> DansTolerance : écart ≤ seuil
+    CalculEcart --> HorsTolerance : écart > seuil
+    HorsTolerance --> [*] : alerte au gérant
+    DansTolerance --> [*]
+  }
+  Cloture --> [*]

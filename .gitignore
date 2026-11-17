@@ -1,0 +1,27 @@
+# ---------- IDE ----------
+.idea/
+*.iml
+.vscode/
+*.launch
+.settings/
+.project
+.classpath
+
+# ---------- Backend (Maven / Java) ----------
+target/
+*.log
+hs_err_pid*
+
+# ---------- Frontend (Angular / Node) ----------
+node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/out-tsc/
+frontend/coverage/
+npm-debug.log*
+yarn-error.log*
+
+# ---------- Système ----------
+.DS_Store
+Thumbs.db
+desktop.ini

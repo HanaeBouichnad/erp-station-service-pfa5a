@@ -1,0 +1,22 @@
+classDiagram
+  direction LR
+  class Fournisseur {
+    Long id
+    String nom
+    String telephone
+    String email
+    String adresse
+  }
+  class Livraison {
+    Long id
+    LocalDateTime dateLivraison
+    String numeroBon
+    Double quantite
+    BigDecimal prixAchatUnitaire
+    Long cuveId
+    String cuveCode
+    Long carburantId
+    String carburantNom
+  }
+  Livraison "*" --> "1" Fournisseur : vient de
+  note for Livraison "cuveId : référence logique vers stock-service (pas de clé étrangère entre bases)"

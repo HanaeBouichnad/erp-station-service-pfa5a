@@ -1,0 +1,60 @@
+classDiagram
+  direction LR
+  class ClientPro {
+    Long id
+    String raisonSociale
+    String ice
+    BigDecimal plafondCredit
+    BigDecimal soldeActuel
+    boolean actif
+    +getDisponible() BigDecimal
+  }
+  class Consommation {
+    Long id
+    Long venteId
+    LocalDateTime dateVente
+    String carburant
+    Double volume
+    BigDecimal montantTTC
+  }
+  class Facture {
+    Long id
+    String numeroFacture
+    LocalDate dateFacture
+    BigDecimal tauxTva
+    BigDecimal montantHT
+    BigDecimal montantTVA
+    BigDecimal montantTTC
+    BigDecimal montantRegle
+    StatutFacture statut
+  }
+  class LigneFacture {
+    Long id
+    String designation
+    Double quantite
+    BigDecimal prixUnitaireHT
+    BigDecimal montantHT
+  }
+  class Reglement {
+    Long id
+    LocalDateTime dateReglement
+    BigDecimal montant
+    String modeReglement
+  }
+  class ParametreFinancier {
+    Long id
+    BigDecimal tauxTva
+    BigDecimal seuilAlerteEncours
+  }
+  class StatutFacture {
+    <<enumeration>>
+    EMISE
+    PARTIELLEMENT_PAYEE
+    PAYEE
+  }
+  ClientPro "1" --> "*" Consommation
+  ClientPro "1" --> "*" Facture
+  Facture "1" *-- "*" LigneFacture
+  Facture "1" --> "*" Reglement
+  Consommation "*" --> "0..1" Facture : facturée dans
+  Facture ..> StatutFacture

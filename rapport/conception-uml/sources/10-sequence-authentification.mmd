@@ -1,0 +1,24 @@
+sequenceDiagram
+  autonumber
+  actor U as Utilisateur
+  participant F as Frontend Angular
+  participant GW as gateway-service
+  participant AU as authentification-service
+  participant M as Microservice métier
+  U->>F: Identifiant et mot de passe
+  F->>GW: POST /api/auth/login (route publique)
+  GW->>AU: Transmet la requête
+  AU->>AU: Vérifie le mot de passe (BCrypt)
+  AU-->>F: JWT (username, rôle, expiration)
+  F->>F: Stocke le jeton
+  U->>F: Ouvre un écran
+  F->>GW: GET /api/... + Authorization: Bearer JWT
+  GW->>GW: Vérifie la signature et le rôle (AccessRules)
+  alt Jeton invalide
+    GW-->>F: 401
+  else Rôle non autorisé
+    GW-->>F: 403
+  else Autorisé
+    GW->>M: Requête + X-User, X-Role
+    M-->>F: Réponse JSON
+  end

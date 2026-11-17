@@ -1,0 +1,46 @@
+flowchart LR
+  classDef acteur fill:#12355b,color:#fff,stroke:#12355b
+  classDef uc fill:#eef4fb,stroke:#1f5a96,color:#1d2733
+  classDef cle fill:#fdecea,stroke:#c62828,color:#1d2733
+
+  P["«acteur»<br/>Pompiste"]:::acteur
+  G["«acteur»<br/>Gérant"]:::acteur
+  C["«acteur»<br/>Comptable"]:::acteur
+  A["«acteur»<br/>Administrateur"]:::acteur
+
+  subgraph SYS["ERP Station-Service (toutes les actions nécessitent une authentification JWT)"]
+    OUV(["Ouvrir son poste et saisir les index de début"]):::uc
+    VEN(["Enregistrer une vente carte, chèque ou crédit"]):::uc
+    CLO(["Clôturer la caisse : index de fin et argent compté"]):::cle
+    ECA(["Contrôler l'écart de caisse"]):::cle
+    PLA(["Vérifier le plafond du client"]):::uc
+    JAU(["Faire un jaugeage"]):::cle
+    COU(["Détecter le coulage"]):::cle
+    LIV(["Réceptionner une livraison"]):::uc
+    PAR(["Régler les tolérances et les seuils"]):::cle
+    STA(["Consulter les pertes et le bilan des pompistes"]):::cle
+    DAS(["Consulter le tableau de bord et les alertes"]):::uc
+    CLI(["Gérer les clients professionnels"]):::uc
+    FAC(["Générer une facture et enregistrer un règlement"]):::uc
+    TVA(["Paramétrer la TVA"]):::uc
+    UTI(["Gérer les utilisateurs et les rôles"]):::uc
+  end
+
+  P --- OUV
+  P --- VEN
+  P --- CLO
+  G --- JAU
+  G --- LIV
+  G --- PAR
+  G --- STA
+  G --- DAS
+  C --- CLI
+  C --- FAC
+  C --- TVA
+  C --- STA
+  A --- UTI
+  A -. "hérite des droits de tous les rôles" .-> G
+
+  CLO -. "«include»" .-> ECA
+  JAU -. "«include»" .-> COU
+  VEN -. "«extend» si crédit" .-> PLA

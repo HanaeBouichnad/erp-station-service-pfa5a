@@ -1,0 +1,17 @@
+flowchart TD
+  A([Début de la clôture]) --> B[Saisir l'argent compté et les index de fin]
+  B --> C{Index de fin saisi pour chaque pistolet ?}
+  C -- Non --> E1[Erreur : index manquant] --> B
+  C -- Oui --> D{Index de fin ≥ index de début ?}
+  D -- Non --> E2[Erreur : index incohérent] --> B
+  D -- Oui --> F[Volume = fin - début, valorisé au prix de vente]
+  F --> G{Volume non saisi > 0 ?}
+  G -- Oui --> H[Sortie de stock et vente en espèces]
+  G -- Non --> I
+  H --> I[Espèces attendues = compteurs - carte - chèque - crédit]
+  I --> J[Écart = argent compté - fond de caisse - espèces attendues]
+  J --> K{"|écart| > écart toléré ?"}
+  K -- Oui --> L[Clôture hors tolérance : alerte sur le tableau de bord]
+  K -- Non --> M[Clôture normale]
+  L --> N([Poste clôturé])
+  M --> N

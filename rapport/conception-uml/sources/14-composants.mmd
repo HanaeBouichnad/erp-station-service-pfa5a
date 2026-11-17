@@ -1,0 +1,40 @@
+flowchart TB
+  classDef infra fill:#12355b,color:#fff,stroke:#12355b
+  classDef svc fill:#eef4fb,stroke:#1f5a96,color:#1d2733
+  classDef db fill:#fff4e0,stroke:#c77700,color:#1d2733
+  FE["Frontend Angular :4200"]:::svc
+  GW["gateway-service :8888<br/>JWT, rôles, routage"]:::infra
+  EU["discovery-service :8761<br/>Eureka"]:::infra
+  FE -->|HTTP + JWT| GW
+  GW <-. "découverte / enregistrement" .-> EU
+  subgraph AUTH["authentification"]
+    AU["authentification-service :8081"]:::svc --- DA[("db_auth")]:::db
+  end
+  subgraph STOCK["stock"]
+    ST["stock-service :8082"]:::svc --- DS[("db_stock")]:::db
+  end
+  subgraph ACHAT["achat"]
+    AC["achat-service :8083"]:::svc --- DAC[("db_achat")]:::db
+  end
+  subgraph VENTE["vente"]
+    VE["vente-service :8084"]:::svc --- DV[("db_vente")]:::db
+  end
+  subgraph CLIENT["client"]
+    CL["client-service :8085"]:::svc --- DC[("db_client")]:::db
+  end
+  subgraph STATS["statistiques (sans base)"]
+    SA["statistiques-service :8086"]:::svc
+  end
+  GW --> AU
+  GW --> ST
+  GW --> AC
+  GW --> VE
+  GW --> CL
+  GW --> SA
+  AC -. OpenFeign .-> ST
+  VE -. OpenFeign .-> ST
+  VE -. OpenFeign .-> CL
+  SA -. OpenFeign .-> VE
+  SA -. OpenFeign .-> ST
+  SA -. OpenFeign .-> AC
+  SA -. OpenFeign .-> CL

@@ -1,0 +1,30 @@
+classDiagram
+  direction LR
+  class Carburant {
+    Long id
+    String nom
+    Double densite
+    BigDecimal prixVente
+    Double toleranceCoulagePct
+  }
+  class Cuve {
+    Long id
+    String code
+    Double capaciteMax
+    Double volumeActuel
+    Double seuilAlerte
+    Long version
+    +isEnAlerte() boolean
+  }
+  class Jaugeage {
+    Long id
+    LocalDateTime dateReleve
+    Double volumeTheorique
+    Double volumeMesure
+    Double ecart
+    Double toleranceAppliquee
+    boolean anomalie
+  }
+  Cuve "*" --> "1" Carburant : contient
+  Jaugeage "*" --> "1" Cuve : concerne
+  note for Jaugeage "anomalie = |ecart| / volumeTheorique > toleranceCoulagePct"
