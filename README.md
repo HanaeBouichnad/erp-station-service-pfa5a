@@ -27,3 +27,7 @@ Détails dans `backend/README.md` et `frontend/README.md`.
 - Java 17 ou plus récent
 - Node.js 20 ou plus récent (pour Angular)
 - PostgreSQL 16 ou Docker Desktop
+
+## Réalisé par : 
+EZ-ZAHRAOUI El-Mehdi
+BOUICHNAD Hanae
